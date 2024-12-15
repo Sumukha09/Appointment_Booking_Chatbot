@@ -40,7 +40,7 @@ npm (Node Package Manager)
 
 Installation
 
-Clone the Repository:
+Clone the Repository:  https://github.com/Sumukha09/Appointment_Booking_Chatbot.git
 
 
 cd chatbot
