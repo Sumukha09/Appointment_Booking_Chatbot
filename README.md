@@ -23,7 +23,8 @@ Python (v3.7 or higher)
 npm (Node Package Manager)**
 
 Installation
-Clone the Repository:  https://github.com/Sumukha09/Appointment_Booking_Chatbot.gi
+Clone the Repository:  https://github.com/Sumukha09/Appointment_Booking_Chatbot.git
+
 cd chatbot
 
 Install Dependencies:
