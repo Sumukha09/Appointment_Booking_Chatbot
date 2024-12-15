@@ -10,23 +10,17 @@ Calendar Integration: Allows users to manage schedules and events.
 
 Dynamic Web Interface: Built with HTML, CSS, and JavaScript for an interactive user experience.
 
-Node.js Backend: Handles server-side logic and API integrations.
+Node.js Backend: Handles server-side logic and email integrations
 
 Technologies Used
 
 Backend:
 
-Python: For auxiliary scripts and automation tasks.
+Python: For medical Bot logic
 
-Node.js: Backend server with Express.js framework.
+Node.js: Backend server 
 
-Frontend:
 
-HTML: Main structure of the application.
-
-CSS: Styling for a user-friendly interface.
-
-JavaScript: Dynamic client-side functionality.
 
 Prerequisites
 
@@ -55,8 +49,8 @@ Create a .env file in the root directory.
 
 Add necessary variables 
 EMAIL_USER=Your gmail
-EMAIL_PASS=go to your gamil and find for app security and obtain a unique password
-PORT=3000
+EMAIL_PASS=go to your gamil and find for app passwords and create a new app name and then obtain a unique password
+PORT= your port number Example 3000
 NODE_ENV=development
 EMAIL_FROM_NAME="Medical Referral System"
 
