@@ -49,7 +49,7 @@ Create a .env file in the root directory.
 
 Add necessary variables 
 EMAIL_USER=Your gmail   ||
-EMAIL_PASS=go to your gamil and find for app passwords and create a new app name and then obtain a unique password  ||
+EMAIL_PASS=go to your manage your google account and find for app passwords and create a new app name and then obtain a unique password  ||
 PORT= your port number Example 3000  ||
 NODE_ENV=development ||
 EMAIL_FROM_NAME="Medical Referral System"
