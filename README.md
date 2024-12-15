@@ -30,7 +30,10 @@ cd chatbot
 Install Dependencies:
 
 npm install
+
  python -m spacy download en_core_web_lg
+
+ 
  pip install flask==2.3.2 flask-cors==4.0.0 spacy==3.7.2 typing==3.7.4.3
 
 Set Up Environment Variables:
