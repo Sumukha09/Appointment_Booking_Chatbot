@@ -1,8 +1,8 @@
-Chatbot Application
-
+**Chatbot Application
+**
 A multi-functional chatbot application built with Python, Node.js, and JavaScript. This project combines backend and frontend technologies to deliver a seamless chatbot experience, including features like calendar integration and dynamic user interactions.
 
-Features
+**Features
 
 Chatbot Functionality: Provides intelligent responses to user queries.
 
@@ -10,19 +10,9 @@ Calendar Integration: Allows users to manage schedules and events.
 
 Dynamic Web Interface: Built with HTML, CSS, and JavaScript for an interactive user experience.
 
-Node.js Backend: Handles server-side logic and email integrations
+Node.js Backend: Handles server-side logic and email integrations**
 
-Technologies Used
-
-Backend:
-
-Python: For medical Bot logic
-
-Node.js: Backend server 
-
-
-
-Prerequisites
+**Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -30,21 +20,19 @@ Node.js (v14 or higher)
 
 Python (v3.7 or higher)
 
-npm (Node Package Manager)
+npm (Node Package Manager)**
 
 Installation
-
-Clone the Repository:  https://github.com/Sumukha09/Appointment_Booking_Chatbot.git
-
-
+Clone the Repository:  https://github.com/Sumukha09/Appointment_Booking_Chatbot.gi
 cd chatbot
 
 Install Dependencies:
 
 npm install
+ python -m spacy download en_core_web_lg
+ pip install flask==2.3.2 flask-cors==4.0.0 spacy==3.7.2 typing==3.7.4.3
 
 Set Up Environment Variables:
-
 Create a .env file in the root directory.
 
 Add these variables
