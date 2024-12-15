@@ -44,12 +44,12 @@ NODE_ENV=development ||
 EMAIL_FROM_NAME="Medical Referral System"
 
 For Running the Application just run python app.py
-Access the Application:
 
+
+Access the Application:
 Open your browser and navigate to http://localhost:3000.
 
 File Structure
-
 Chatbot/
 ├── .env                # Environment variables
 ├── .gitignore          # Git ignored files
