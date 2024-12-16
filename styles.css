@@ -265,57 +265,5 @@ button i {
         border-radius: 10px;
     }
 
-    .chat-header {
-        padding: 12px;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .header-content i {
-        font-size: 20px;
-    }
-
-    .header-content h1 {
-        font-size: 16px;
-    }
-
-    .chat-box {
-        padding: 10px;
-    }
-
-    .message-content {
-        max-width: 90%;
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-
-    .chat-input {
-        padding: 12px;
-        gap: 8px;
-    }
-
-    input {
-        font-size: 13px;
-        padding: 8px 12px;
-    }
-
-    button {
-        width: 35px;
-        height: 35px;
-    }
-
-    button i {
-        font-size: 14px;
-    }
-
-    .option-button {
-        min-width: 100px;
-        font-size: 12px;
-        padding: 8px 12px;
-        flex: 1 1 100%;
-    }
-
-    .options-container {
-        gap: 6px;
-        padding: 8px;
-    }
+   
 }
