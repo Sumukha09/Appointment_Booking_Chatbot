@@ -219,6 +219,7 @@ button i {
 
     .chat-box {
         padding: 15px;
+        margin-bottom: 10px;
     }
 
     .message-content {
