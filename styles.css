@@ -195,9 +195,9 @@ button i {
 @media (max-width: 600px) {
     .container {
         width: 95%;
-        height: 90vh;
+        height: 85vh;
         border-radius: 15px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
 
     .chat-header {
@@ -219,7 +219,8 @@ button i {
 
     .chat-box {
         padding: 15px;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
+        height: calc(100% - 120px);
     }
 
     .message-content {
