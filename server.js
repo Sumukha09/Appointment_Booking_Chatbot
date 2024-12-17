@@ -8,10 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files
 app.use(express.static(__dirname));
 
-// Create a transporter using Gmail with secure settings
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -23,7 +21,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Verify email configuration on startup
 transporter.verify(function(error, success) {
     if (error) {
         console.error('Email configuration error:', error);
@@ -32,7 +29,6 @@ transporter.verify(function(error, success) {
     }
 });
 
-// Helper function to send emails
 async function sendEmail(options) {
     try {
         const info = await transporter.sendMail(options);
@@ -44,11 +40,9 @@ async function sendEmail(options) {
     }
 }
 
-// Endpoint to send appointment confirmation email
 app.post('/send-appointment-email', async (req, res) => {
     const { doctor, day, time, email, appointmentId } = req.body;
 
-    // Generate Google Calendar link
     const getNextDayOccurrence = (dayName) => {
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         const today = new Date();
@@ -82,12 +76,10 @@ app.post('/send-appointment-email', async (req, res) => {
     const appointmentDate = getNextDayOccurrence(day);
     const time24h = convertTo24Hour(time);
     
-    // Create start and end times in local timezone
     const startDateTime = new Date(`${appointmentDate}T${time24h}:00+05:30`);
     const endDateTime = new Date(startDateTime);
     endDateTime.setHours(startDateTime.getHours() + 1);
 
-    // Format dates for Google Calendar
     const formatDate = (date) => {
         const pad = (n) => n.toString().padStart(2, '0');
         const year = date.getFullYear();
@@ -145,7 +137,6 @@ app.post('/send-appointment-email', async (req, res) => {
     }
 });
 
-// Endpoint to send appointment cancellation email
 app.post('/send-cancellation-email', async (req, res) => {
     const { doctor, day, time, email, appointmentId } = req.body;
 
@@ -188,7 +179,6 @@ app.post('/send-cancellation-email', async (req, res) => {
     }
 });
 
-// Endpoint to send appointment update email
 app.post('/send-update-email', async (req, res) => {
     const { doctor, day, time, email, appointmentId, oldDay, oldTime } = req.body;
 
@@ -202,15 +192,15 @@ app.post('/send-update-email', async (req, res) => {
         html: `
             <h2>Appointment Update Confirmation</h2>
             <p>Dear Patient,</p>
-            <p>Your appointment has been rescheduled from ${oldDay} at ${oldTime} to:</p>
+            <p>Your appointment has been successfully updated. Here are your new appointment details:</p>
             <ul style="list-style-type: none; padding-left: 0;">
                 <li><strong>Doctor:</strong> ${doctor}</li>
                 <li><strong>New Day:</strong> ${day}</li>
                 <li><strong>New Time:</strong> ${time}</li>
                 <li><strong>Appointment ID:</strong> ${appointmentId}</li>
             </ul>
-            <p>Please save your appointment ID for future reference.</p>
-            <p>If you need to make any changes, please use our chat interface.</p>
+            <p>Previous appointment was scheduled for ${oldDay} at ${oldTime}.</p>
+            <p>If you need to make any further changes, please use our chat interface.</p>
             <br>
             <p>Best regards,</p>
             <p>Medical Referral System Team</p>
@@ -221,7 +211,7 @@ app.post('/send-update-email', async (req, res) => {
         const result = await sendEmail(mailOptions);
         res.json({ success: true, message: 'Update confirmation email sent successfully', messageId: result.messageId });
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('Error sending update email:', error);
         console.error('Error details:', {
             code: error.code,
             response: error.response,
@@ -231,7 +221,7 @@ app.post('/send-update-email', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });

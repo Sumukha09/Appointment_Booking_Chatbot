@@ -24,14 +24,11 @@ MEDICAL_SPECIALTIES = {
     "General Physician": ["fever", "fatigue", "weakness", "general health", "unknown"]
 }
 
-
 nlp = spacy.load('en_core_web_lg')
 
 def analyze_symptoms(symptoms: str) -> str:
- 
     doc = nlp(symptoms.lower())
     
-   
     specialty_scores = {specialty: 0 for specialty in MEDICAL_SPECIALTIES}
    
     for specialty, keywords in MEDICAL_SPECIALTIES.items():
@@ -39,7 +36,6 @@ def analyze_symptoms(symptoms: str) -> str:
             if keyword in symptoms.lower():
                 specialty_scores[specialty] += 2
             
-       
         for token in doc:
             if not token.is_stop and not token.is_punct:
                 for keyword in keywords:
@@ -48,7 +44,6 @@ def analyze_symptoms(symptoms: str) -> str:
                         if similarity > 0.7:
                             specialty_scores[specialty] += similarity
 
-   
     max_score = max(specialty_scores.values())
     if max_score < 1.0:
         return "General Physician"
@@ -77,7 +72,6 @@ def handle_symptoms():
         return jsonify({'error': str(e)}), 500
 
 def start_node_server():
-    """Start the Node.js server in a separate thread"""
     try:
         node_process = subprocess.Popen(['node', 'server.js'], 
                                      stdout=subprocess.PIPE,
@@ -89,25 +83,20 @@ def start_node_server():
         return None
 
 def start_browser():
-    """Open the browser after a short delay"""
     webbrowser.open('http://127.0.0.1:5000')
 
 if __name__ == '__main__':
- 
     print("Starting Node.js server...")
     node_process = start_node_server()
     
     if node_process:
-       
         flask_thread = threading.Thread(target=lambda: app.run(port=5000))
         flask_thread.daemon = True
         flask_thread.start()
         
-      
         threading.Timer(1.5, start_browser).start()
         
         try:
-           
             while True:
                 output = node_process.stdout.readline()
                 if output:

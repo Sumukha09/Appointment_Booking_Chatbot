@@ -3,15 +3,15 @@ const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 
 const doctors = [
-    { id: 1, name: "Dr. Smith", specialization: "Cardiologist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"] },
-    { id: 2, name: "Dr. Johnson", specialization: "Dermatologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"] },
-    { id: 3, name: "Dr. Williams", specialization: "Pediatrician", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
-    { id: 4, name: "Dr. Brown", specialization: "Orthopedic", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["9:30 AM", "11:30 AM", "1:30 PM", "3:30 PM"] },
-    { id: 5, name: "Dr. Davis", specialization: "Gastroenterologist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
-    { id: 6, name: "Dr. Miller", specialization: "Neurologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"] },
-    { id: 7, name: "Dr. Wilson", specialization: "Psychiatrist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"] },
-    { id: 8, name: "Dr. Moore", specialization: "Oncologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
-    { id: 9, name: "Dr. Taylor", specialization: "General Physician", availability: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"] }
+    { id: 1, name: "Dr. Srinivas V K", specialization: "Cardiologist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["9:00 AM", "11:00 AM", "1:30 PM", "3:00 PM"] },
+    { id: 2, name: "Dr. Neha Gupta", specialization: "Dermatologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"] },
+    { id: 3, name: "Dr. Sarbari Gupta", specialization: "Pediatritian", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
+    { id: 4, name: "Dr. Mohan M R", specialization: "Orthopedic", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["9:30 AM", "11:30 AM", "1:30 PM", "3:30 PM"] },
+    { id: 5, name: "Dr. Roopa Bhushan", specialization: "Gastroenterologist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
+    { id: 6, name: "Dr. Rajesh K N", specialization: "Neurologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"] },
+    { id: 7, name: "Dr. Anand Jayaraman", specialization: "Psychiatrist", availability: ["Monday", "Wednesday", "Friday"], timeSlots: ["10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"] },
+    { id: 8, name: "Dr. Anil Kamath", specialization: "Oncologist", availability: ["Tuesday", "Thursday", "Saturday"], timeSlots: ["8:30 AM", "10:30 AM", "12:30 PM", "2:30 PM"] },
+    { id: 9, name: "Dr. Prabha Ramadorai", specialization: "General Physician", availability: ["Monday", "Tuesday", "Wednesday", "Thursday"], timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"] }
 ];
 
 function addMessage(message, isUser = false) {
@@ -37,7 +37,6 @@ function addOptions(options) {
         button.textContent = option;
         button.onclick = () => {
             handleUserInput(option);
-            
             optionsContainer.remove();
         };
         optionsContainer.appendChild(button);
@@ -69,10 +68,23 @@ function getAppointmentSession() {
     return data ? JSON.parse(data) : null;
 }
 
+function isTimeSlotAvailable(doctor, day, time) {
+    const appointments = JSON.parse(localStorage.getItem('appointments')) || {};
+    return !Object.values(appointments).some(appointment => 
+        appointment.doctor === doctor &&
+        appointment.day === day &&
+        appointment.time === time &&
+        appointment.status === 'Confirmed'
+    );
+}
+
+function getAvailableTimeSlots(doctor, day) {
+    return doctor.timeSlots.filter(time => isTimeSlotAvailable(doctor.name, day, time));
+}
+
 async function processInput(input) {
     input = input.toLowerCase().trim();
 
-    // Handle the three specific button actions
     if (input === "try describing your symptoms again") {
         sessionStorage.setItem('mode', 'symptoms');
         addMessage("Please describe your symptoms:");
@@ -99,8 +111,7 @@ async function processInput(input) {
             "Check appointment status",
             "Cancel appointment",
             "Update appointment"
-    ]);
-        
+        ]);
         return;
     }
 
@@ -114,9 +125,21 @@ async function processInput(input) {
         const inputDay = daysOfWeek.find(day => input.toLowerCase() === day);
         
         if (inputDay && selectedDoctor.availability.includes(inputDay.charAt(0).toUpperCase() + inputDay.slice(1))) {
+            const availableTimeSlots = getAvailableTimeSlots(selectedDoctor, inputDay.charAt(0).toUpperCase() + inputDay.slice(1));
+            
+            if (availableTimeSlots.length === 0) {
+                addMessage(`I apologize, but ${selectedDoctor.name} has no available time slots for ${inputDay}. Please select another day or doctor:`);
+                addOptions([
+                    ...selectedDoctor.availability.map(day => day.toLowerCase()),
+                    "View all doctors",
+                    "Go back to main menu"
+                ]);
+                return;
+            }
+            
             sessionStorage.setItem('selectedDay', inputDay);
             addMessage(`Great! Here are the available time slots for ${selectedDoctor.name} on ${inputDay}:`);
-            addOptions(selectedDoctor.timeSlots);
+            addOptions(availableTimeSlots);
             return;
         }
     }
@@ -126,19 +149,28 @@ async function processInput(input) {
         if (timeRegex.test(input)) {
             const normalizedTime = input.toUpperCase();
             if (selectedDoctor.timeSlots.includes(normalizedTime)) {
-                sessionStorage.setItem('selectedTime', normalizedTime);
-                addMessage("Please provide your email to confirm the appointment:");
-                return;
+                if (isTimeSlotAvailable(selectedDoctor.name, selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1), normalizedTime)) {
+                    sessionStorage.setItem('selectedTime', normalizedTime);
+                    addMessage("Please provide your email to confirm the appointment:");
+                    return;
+                } else {
+                    addMessage("I apologize, but this time slot is no longer available. Please select another time slot:");
+                    const availableTimeSlots = getAvailableTimeSlots(selectedDoctor, selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1));
+                    addOptions(availableTimeSlots);
+                    return;
+                }
             } else {
                 addMessage("That time slot is not available. Please select from the following time slots:");
-                addOptions(selectedDoctor.timeSlots);
+                const availableTimeSlots = getAvailableTimeSlots(selectedDoctor, selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1));
+                addOptions(availableTimeSlots);
                 return;
             }
         }
         
         if (input.toLowerCase() !== 'back' && input.toLowerCase() !== 'cancel') {
             addMessage("Please select a valid time slot from the options below:");
-            addOptions(selectedDoctor.timeSlots);
+            const availableTimeSlots = getAvailableTimeSlots(selectedDoctor, selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1));
+            addOptions(availableTimeSlots);
             return;
         }
     }
@@ -201,7 +233,7 @@ async function processInput(input) {
                 Email: ${input}
                 Appointment ID: ${appointmentId}
                 
-                Note: There was an issue sending the confirmation email.`);
+                ⚠️ Note: There was an issue sending the confirmation email.`);
         });
 
         sessionStorage.clear();
@@ -436,25 +468,25 @@ async function processInput(input) {
 
         if (appointment) {
             const doctor = doctors.find(d => d.name === appointment.doctor);
-            if (!doctor) {
-                addMessage("Error: Doctor not found. Please try again later.");
-                sessionStorage.clear();
-                return;
+    
+            if (doctor) {
+                sessionStorage.setItem('appointmentToUpdate', input);
+                sessionStorage.setItem('mode', 'selectUpdateOption');
+                addMessage(`Current appointment details:
+                    Doctor: ${appointment.doctor}
+                    Day: ${appointment.day}
+                    Time: ${appointment.time}
+                    
+                    What would you like to update?`);
+                addOptions([
+                    "Update day",
+                    "Update time",
+                    "Cancel update"
+                ]);
+            } else {
+                addMessage("Error finding the doctor's details. Please try again or contact support.");
+                resetToMainMenu();
             }
-
-            sessionStorage.setItem('appointmentToUpdate', input);
-            sessionStorage.setItem('mode', 'selectUpdateOption');
-            addMessage(`Current appointment details:
-                Doctor: ${appointment.doctor}
-                Day: ${appointment.day}
-                Time: ${appointment.time}
-                
-                What would you like to update?`);
-            addOptions([
-                "Update day",
-                "Update time",
-                "Cancel update"
-            ]);
         } else {
             addMessage("No appointment found with this ID. Please check the ID and try again.");
             sessionStorage.clear();
