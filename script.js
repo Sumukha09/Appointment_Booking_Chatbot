@@ -35,7 +35,11 @@ function addOptions(options) {
         const button = document.createElement('button');
         button.className = 'option-button';
         button.textContent = option;
-        button.onclick = () => handleUserInput(option);
+        button.onclick = () => {
+            handleUserInput(option);
+            
+            optionsContainer.remove();
+        };
         optionsContainer.appendChild(button);
     });
 
@@ -67,6 +71,38 @@ function getAppointmentSession() {
 
 async function processInput(input) {
     input = input.toLowerCase().trim();
+
+    // Handle the three specific button actions
+    if (input === "try describing your symptoms again") {
+        sessionStorage.setItem('mode', 'symptoms');
+        addMessage("Please describe your symptoms:");
+        return;
+    }
+
+    if (input === "view all doctors") {
+        addMessage("Here are all our available doctors:");
+        doctors.forEach(doctor => {
+            addMessage(`${doctor.name} - ${doctor.specialization}\nAvailable on: ${doctor.availability.join(', ')}`);
+        });
+        addMessage("Would you like to book an appointment with any of these doctors?");
+        addOptions(doctors.map(doctor => `Book with ${doctor.name} (${doctor.specialization})`));
+        return;
+    }
+
+    if (input === "go back to main menu") {
+        sessionStorage.clear();
+        addMessage("How can I help you today?");
+        addOptions([
+            "Describe your symptoms",
+            "Book an appointment",
+            "View available doctors",
+            "Check appointment status",
+            "Cancel appointment",
+            "Update appointment"
+    ]);
+        
+        return;
+    }
 
     const currentMode = sessionStorage.getItem('mode');
     const selectedDoctor = JSON.parse(sessionStorage.getItem('selectedDoctor'));
